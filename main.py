@@ -13,16 +13,29 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
-bot = commands.Bot(command_prefix=["atlas ", "atlas", "Atlas ", "Atlas"], intents=intents, help_command=None)
+
+class AtlasBot(commands.Bot):
+    async def setup_hook(self):
+        database.init_db()
+        for ext in ["cogs.help_command", "cogs.combat"]:
+            try:
+                await self.load_extension(ext)
+                print(f"[Atlas] Loaded {ext}")
+            except Exception as e:
+                print(f"[Atlas] ERROR loading {ext}: {e}")
+
+
+bot = AtlasBot(
+    command_prefix=["atlas ", "atlas", "Atlas ", "Atlas"],
+    intents=intents,
+    help_command=None,
+)
 
 
 @bot.event
 async def on_ready():
-    database.init_db()
-    await bot.load_extension("cogs.help_command")
-    await bot.load_extension("cogs.combat")
     print(f"[Atlas] Online as {bot.user} (ID: {bot.user.id})")
-    print(f"[Atlas] Prefix: atlas | Satellite 05 — Violence")
+    print(f"[Atlas] Prefix: atlas  | Satellite 05 — Violence")
 
 
 @bot.event
