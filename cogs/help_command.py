@@ -2,13 +2,14 @@ import discord
 from discord.ext import commands
 
 COMMANDS_DATA = {
-    "👊 Combat": {
-        "atlas punch @user": "Punch someone. Hard. Logged in the database.",
-        "atlas fight @user": "Challenge a user to a fight. A winner is decided by fate.",
-        "atlas score": "Show the fight leaderboard for this server.",
-        "atlas rage": "Atlas enters RAGE MODE. Unpredictable things happen.",
-        "atlas smash <thing>": "Atlas smashes something into pieces.",
-        "atlas siblings": "List all six Vegapunk satellites.",
+    "🍓 Economy": {
+        "atlas balance [@user]": "Check your (or another user's) berry balance.",
+        "atlas daily": "Claim your daily berries. Multiplied by your York trust level.",
+        "atlas pay @user <amount>": "Transfer berries to another user.",
+        "atlas top": "Show the berry leaderboard for this server.",
+    },
+    "🤖 Satellite Info": {
+        "atlas siblings": "List all six Vegapunk satellites and their roles.",
     },
     "❓ Help": {
         "atlas help": "Show this help menu.",
@@ -28,12 +29,12 @@ class CategorySelect(discord.ui.Select):
         category = self.values[0]
         cmds = COMMANDS_DATA[category]
         embed = discord.Embed(
-            title=f"Atlas — {category}",
+            title=f"⚙️ Atlas — {category}",
             color=discord.Color.orange(),
         )
         for name, desc in cmds.items():
             embed.add_field(name=f"`{name}`", value=desc, inline=False)
-        embed.set_footer(text="Satellite 05 — Atlas (Violence) | Prefix: atlas")
+        embed.set_footer(text="Satellite 05 — Atlas (Violence) | Economy & Utility | Prefix: atlas")
         await interaction.response.edit_message(embed=embed)
 
 
@@ -50,14 +51,16 @@ class HelpCog(commands.Cog):
     @commands.command(name="help", aliases=["?"])
     async def help_command(self, ctx):
         embed = discord.Embed(
-            title="👊 Atlas — Satellite 05 (Violence)",
+            title="⚙️ ATLAS — Satellite 05 (Violence)",
             description=(
-                "You want help?! Then STOP WASTING MY TIME and pick a category!\n\n"
-                "**Prefix:** `atlas`"
+                "Hi! I'm Atlas. I handle berries and economy for the whole system.\n"
+                "Claim your daily, check your balance, pay friends, and more!\n\n"
+                "**Prefix:** `atlas`\n"
+                "Tip: Feed York to boost your daily multiplier!"
             ),
             color=discord.Color.orange(),
         )
-        embed.set_footer(text="Use the menu below to explore commands.")
+        embed.set_footer(text="Select a category below to view commands.")
         await ctx.send(embed=embed, view=HelpView())
 
 
